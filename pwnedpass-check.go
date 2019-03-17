@@ -11,7 +11,7 @@ import (
 )
 
 // https://haveibeenpwned.com/API/v2#PwnedPasswords
-// GET https://api.pwnedpasswords.com/range/{first 5 hash chars}
+// GET https://api.pwnedpasswords.com/range/{first 5 SHA1 hash chars}
 
 func getSHA1Hash(password string) string {
 	hasher := sha1.New()
@@ -38,7 +38,8 @@ func main() {
 	suffix := strings.ToUpper(hash[5:])
 	for _, v := range result {
 		if strings.Contains(v, suffix) {
-			fmt.Println(v)
+			count := strings.Split(v, ":")[1]
+			fmt.Println("The password", pass, "was found in", count, "breaches.")
 		}
 	}
 }
