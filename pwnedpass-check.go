@@ -1,24 +1,29 @@
 package main
 
 import (
-	"crypto/md5"
+	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"strings"
 )
 
 // https://haveibeenpwned.com/API/v2#PwnedPasswords
 // GET https://api.pwnedpasswords.com/range/{first 5 hash chars}
 
-func getMD5Hash(password string) string {
-	hasher := md5.New()
+func getSHA1Hash(password string) string {
+	hasher := sha1.New()
 	hasher.Write([]byte(password))
-	return hex.EncodeToString(hasher.Sum(nil))
+	hash := hex.EncodeToString(hasher.Sum(nil))
+	return strings.ToUpper(hash)
 }
 
 func main() {
-	res, err := http.Get("https://api.pwnedpasswords.com/range/28675")
+	pass := os.Args[1]
+	hash := getSHA1Hash(pass)
+	res, err := http.Get("https://api.pwnedpasswords.com/range/" + hash[0:5])
 	if err != nil {
 		panic(err)
 	}
@@ -28,5 +33,12 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(string(body))
+	result := strings.Fields(string(body))
+
+	suffix := strings.ToUpper(hash[5:])
+	for _, v := range result {
+		if strings.Contains(v, suffix) {
+			fmt.Println(v)
+		}
+	}
 }

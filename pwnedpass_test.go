@@ -2,9 +2,9 @@ package main
 
 import "testing"
 
-func TestGetMD5Hash(t *testing.T) {
-	MD5Hash := getMD5Hash("password")
-	if MD5Hash != "5f4dcc3b5aa765d61d8327deb882cf99" {
-		t.Errorf("Wrong hash, got \"%s\".", MD5Hash)
+func TestGetSHA1Hash(t *testing.T) {
+	SHA1Hash := getSHA1Hash("password")
+	if SHA1Hash != "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8" {
+		t.Errorf("Wrong hash, got \"%s\".", SHA1Hash)
 	}
 }
