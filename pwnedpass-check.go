@@ -34,11 +34,10 @@ func main() {
 	}
 
 	result := strings.Fields(string(body))
-
-	suffix := strings.ToUpper(hash[5:])
-	for _, v := range result {
-		if strings.Contains(v, suffix) {
-			count := strings.Split(v, ":")[1]
+	suffix := hash[5:]
+	for _, r := range result {
+		if strings.Contains(r, suffix) {
+			count := strings.Split(r, ":")[1]
 			fmt.Println("The password", pass, "was found in", count, "breaches.")
 		}
 	}
